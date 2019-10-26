@@ -19,31 +19,43 @@ class App extends React.Component {
         e.preventDefault();
         const city = e.target.elements.city.value;
         const country = e.target.elements.country.value;
-        const ApiCall = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_KEY}`);
-        const data = await ApiCall.json();
-        if(city && country){
-            //can be deleted later
-            console.log(data);
-            this.setState({
-                icon: data.weather[0].icon,
-                temperature: data.main.temp,
-                city: data.name,
-                country: data.sys.country,
-                humidity: data.main.humidity,
-                description: data.weather[0].description,
-                error: undefined
-            });
-        }else{
-            this.setState({
-                icon: undefined,
-                temperature: undefined,
-                city: undefined,
-                country: undefined,
-                humidity: undefined,
-                description: undefined,
-                error: "Enter the values"
-            });
-        }
+        try {
+            const ApiCall = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_KEY}`);
+            const data = await ApiCall.json();
+            if(city && country){
+                //can be deleted later
+                console.log(data);
+                this.setState({
+                    icon: data.weather[0].icon,
+                    temperature: data.main.temp,
+                    city: data.name,
+                    country: data.sys.country,
+                    humidity: data.main.humidity,
+                    description: data.weather[0].description,
+                    error: undefined
+                });
+            }else{
+                this.setState({
+                    icon: undefined,
+                    temperature: undefined,
+                    city: undefined,
+                    country: undefined,
+                    humidity: undefined,
+                    description: undefined,
+                    error: "Enter the values"
+                });
+            }
+          } catch(err) {
+                this.setState({
+                    icon: undefined,
+                    temperature: undefined,
+                    city: undefined,
+                    country: undefined,
+                    humidity: undefined,
+                    description: undefined,
+                    error: "Can't the find place you're lookinf for"
+                });
+          }
     }
     render(){
         return (
